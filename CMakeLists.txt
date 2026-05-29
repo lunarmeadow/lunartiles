@@ -17,7 +17,7 @@ option(USE_ASAN "Turn on ASAN" OFF)
 include(FetchContent)
 
 # https://github.com/raysan5/raylib/blob/master/projects/CMake/CMakeLists.txt
-set(RAYLIB_VERSION 5.5)
+set(RAYLIB_VERSION 6.0)
 find_package(raylib ${RAYLIB_VERSION} QUIET) # QUIET or REQUIRED
 if (NOT raylib_FOUND) # If there's none, fetch and build raylib
     FetchContent_Declare(
@@ -63,8 +63,10 @@ ${PROJECT_SOURCE_DIR}/src/main.c
 # BUILD TARGET CONFIG
 
 add_executable(lunartiles ${SOURCES})
-target_link_libraries(lunartiles PRIVATE raylib raygui miniz)
+target_link_libraries(lunartiles PRIVATE raylib miniz)
 target_link_libraries(lunartiles PUBLIC $<$<BOOL:${USE_ASAN}>:ASAN::ASAN>)
+target_include_directories(lunartiles PRIVATE ${raygui_SOURCE_DIR}/src)
+target_include_directories(lunartiles PRIVATE ${raygui_SOURCE_DIR}/styles/lavanda)
 
 # BUILD TYPES / COMPILE OPTIONS
 
