@@ -58,6 +58,8 @@ target_link_options(ASAN::ASAN INTERFACE -fsanitize=address,undefined)
 
 set(SOURCES
 ${PROJECT_SOURCE_DIR}/src/main.c
+${PROJECT_SOURCE_DIR}/src/ui/tilegrid.c
+${PROJECT_SOURCE_DIR}/src/ui/viewport.c
 )
 
 # BUILD TARGET CONFIG
@@ -65,6 +67,7 @@ ${PROJECT_SOURCE_DIR}/src/main.c
 add_executable(lunartiles ${SOURCES})
 target_link_libraries(lunartiles PRIVATE raylib miniz)
 target_link_libraries(lunartiles PUBLIC $<$<BOOL:${USE_ASAN}>:ASAN::ASAN>)
+target_include_directories(lunartiles PRIVATE ${raylib_SOURCE_DIR}/src)
 target_include_directories(lunartiles PRIVATE ${raygui_SOURCE_DIR}/src)
 target_include_directories(lunartiles PRIVATE ${raygui_SOURCE_DIR}/styles/lavanda)
 

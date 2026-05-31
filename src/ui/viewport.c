@@ -15,39 +15,11 @@
  */
 
 #include "raylib.h"
+#include "viewport.h"
 
-#define RAYGUI_IMPLEMENTATION
-#include "raygui.h"
-#include "style_lavanda.h"
-
-#include "ui/tilegrid.h"
-#include "ui/viewport.h"
-
-#define TILE_SIZE 8
-#define TILE_ROWS 64
-#define TILE_COLS 64
-
-int main()
+void InitializeViewport(viewport_state_t* state, int w, int h)
 {
-    InitWindow(1280, 720, "lunartiles");
-    SetTargetFPS(60);
-
-    GuiLoadStyleLavanda();
-
-    grid_state_t grid;
-    viewport_state_t viewport;
-
-    InitializeViewport(&viewport, 960, 540);
-    InitializeTileGrid(&grid, 64, 64, 16, 2);
-
-    while (!WindowShouldClose())
-    {
-        BeginDrawing();
-        ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR)));
-        DrawTileGrid(&grid);
-        EndDrawing();
-    }
-
-    CloseWindow();
-    return 0;
+    state->cam.zoom = 1.0f;
+    state->width = w;
+    state->height = h;
 }
