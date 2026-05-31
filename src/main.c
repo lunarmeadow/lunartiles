@@ -21,30 +21,32 @@
 #include "style_lavanda.h"
 
 #include "ui/tilegrid.h"
+#include "ui/screen.h"
 #include "ui/viewport.h"
-
-#define TILE_SIZE 8
-#define TILE_ROWS 64
-#define TILE_COLS 64
 
 int main()
 {
-    InitWindow(1280, 720, "lunartiles");
-    SetTargetFPS(60);
+    grid_state_t grid;
+    screen_t screen;
+    viewport_state_t viewport;
+
+    InitializeTileGrid(&grid, 128, 128, 16, 4);
+    InitializeScreen(&screen, 1280, 720, 60);
+    InitializeViewport(&viewport);
 
     GuiLoadStyleLavanda();
 
-    grid_state_t grid;
-    viewport_state_t viewport;
-
-    InitializeViewport(&viewport, 960, 540);
-    InitializeTileGrid(&grid, 64, 64, 16, 2);
-
     while (!WindowShouldClose())
     {
+        // update all editor state before draw
+        UpdateViewport(&viewport, &grid, &screen);
+
+        // draw everything
         BeginDrawing();
-        ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR)));
-        DrawTileGrid(&grid);
+            ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR)));
+            BeginMode2D(viewport.cam);
+                DrawTileGrid(&grid);
+            EndMode2D();
         EndDrawing();
     }
 

@@ -60,6 +60,7 @@ set(SOURCES
 ${PROJECT_SOURCE_DIR}/src/main.c
 ${PROJECT_SOURCE_DIR}/src/ui/tilegrid.c
 ${PROJECT_SOURCE_DIR}/src/ui/viewport.c
+${PROJECT_SOURCE_DIR}/src/ui/screen.c
 )
 
 # BUILD TARGET CONFIG

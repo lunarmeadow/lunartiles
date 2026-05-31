@@ -17,6 +17,7 @@
 #include "tilegrid.h"
 #include "raylib.h"
 #include "raygui.h"
+#include <math.h>
 
 void InitializeTileGrid(grid_state_t* grid, int w, int h, int spacing, int divs)
 {
@@ -29,16 +30,16 @@ void InitializeTileGrid(grid_state_t* grid, int w, int h, int spacing, int divs)
 void DrawTileGrid(grid_state_t* grid)
 {
     // derived from lavanda line color
-    Color minor = GetColor(0x84adb7ff);
+    Color minor = GetColor(0x6374a0ff);
     Color major = GetColor(0x7184b7ff);
     Color median = GetColor(0x67b7b2ff);
 
     Color cur;
 
-    for(int x = 0; x < grid->width * grid->spacing; x += grid->spacing)
+    for(int x = 0; x <= grid->width * grid->spacing; x += grid->spacing)
     {
         // calculate color points
-        if(x == (grid->width / 2) * grid->spacing)
+        if(x == round(grid->width / 2.0f) * grid->spacing)
             cur = median;
         else if(x % grid->highlightDivs == 0)
             cur = major;
@@ -48,9 +49,9 @@ void DrawTileGrid(grid_state_t* grid)
         DrawLine(x, 0, x, grid->height * grid->spacing, cur);
     }
 
-    for(int y = 0; y < grid->height * grid->spacing; y += grid->spacing)
+    for(int y = 0; y <= grid->height * grid->spacing; y += grid->spacing)
     {
-        if(y == (grid->height / 2) * grid->spacing)
+        if(y == round(grid->height / 2.0f) * grid->spacing)
             cur = median;
         else if(y % grid->highlightDivs == 0)
             cur = major;
