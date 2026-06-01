@@ -14,15 +14,19 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "context.h"
-#include "raylib.h"
+#ifndef _BLANK_H
+#define _BLANK_H
 
-void InitializeScreen(ui_context_t* ctx, int w, int h, int fps)
-{
-    ctx->screen.width = w;
-    ctx->screen.height = h;
-    ctx->screen.fps = fps;
+#include "tilegrid.h"
+#include "screen.h"
+#include "viewport.h"
 
-    InitWindow(ctx->screen.width, ctx->screen.height, "lunartiles");
-    SetTargetFPS(ctx->screen.fps);
-}
+typedef struct ui_context {
+    grid_state_t grid;
+    screen_t screen;
+    viewport_state_t viewport;
+} ui_context_t;
+
+void InitializeUIContext(ui_context_t* ctx);
+
+#endif

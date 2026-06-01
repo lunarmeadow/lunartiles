@@ -16,107 +16,106 @@
 
 #include "raylib.h"
 #include "raymath.h"
-#include "viewport.h"
-#include "tilegrid.h"
+#include "context.h"
 
-void ClampTarget(viewport_state_t* viewport, grid_state_t* grid)
+void ClampTarget(ui_context_t* ctx)
 {
     float minX = 0;
-    float maxX = (grid->width * grid->spacing);
+    float maxX = (ctx->grid.width * ctx->grid.spacing);
     float minY = 0;
-    float maxY = (grid->height * grid->spacing);
+    float maxY = (ctx->grid.height * ctx->grid.spacing);
 
-    if(viewport->cam.target.x < minX)
+    if(ctx->viewport.cam.target.x < minX)
     {
-        viewport->cam.target.x = minX;
+        ctx->viewport.cam.target.x = minX;
     }
-    if(viewport->cam.target.x > maxX)
+    if(ctx->viewport.cam.target.x > maxX)
     {
-        viewport->cam.target.x = maxX;
+        ctx->viewport.cam.target.x = maxX;
     }
-    if(viewport->cam.target.y < minY)
+    if(ctx->viewport.cam.target.y < minY)
     {
-        viewport->cam.target.y = minY;
+        ctx->viewport.cam.target.y = minY;
     }
-    if(viewport->cam.target.y > maxY)
+    if(ctx->viewport.cam.target.y > maxY)
     {
-        viewport->cam.target.y = maxY;
+        ctx->viewport.cam.target.y = maxY;
     }
 }
 
-void CenterViewport(viewport_state_t* viewport, grid_state_t* grid, screen_t* screen)
+void CenterViewport(ui_context_t* ctx)
 {
-    Vector2 offset = { screen->width / 2, screen->height / 2 };
-    viewport->cam.offset = offset;
-    viewport->cam.target.x = (grid->width * grid->spacing) / 2.0f;
-    viewport->cam.target.y = (grid->height * grid->spacing) / 2.0f;
-    viewport->cam.zoom = 1.0f;
+    Vector2 offset = { ctx->screen.width / 2, ctx->screen.height / 2 };
+    ctx->viewport.cam.offset = offset;
+    ctx->viewport.cam.target.x = (ctx->grid.width * ctx->grid.spacing) / 2.0f;
+    ctx->viewport.cam.target.y = (ctx->grid.height * ctx->grid.spacing) / 2.0f;
+    ctx->viewport.cam.zoom = 1.0f;
 }
 
 // adapted from raylib 2d mouse zoom tutorial
-void UpdateViewport(viewport_state_t* viewport, grid_state_t* grid, screen_t* screen)
+void UpdateViewport(ui_context_t* ctx)
 {
-    if (IsKeyPressed(KEY_LEFT_BRACKET)) viewport->zoomMode = 0;
-    else if (IsKeyPressed(KEY_RIGHT_BRACKET)) viewport->zoomMode = 1;
+    if (IsKeyPressed(KEY_LEFT_BRACKET)) ctx->viewport.zoomMode = 0;
+    else if (IsKeyPressed(KEY_RIGHT_BRACKET)) ctx->viewport.zoomMode = 1;
 
     if (IsKeyPressed(KEY_R))
     {
-        CenterViewport(viewport, grid, screen);
+        CenterViewport(ctx);
     }
 
-    Vector2 worldCoords = GetScreenToWorld2D(GetMousePosition(), viewport->cam);
-    grid->x = worldCoords.x / grid->spacing;
-    grid->y = worldCoords.y / grid->spacing;
+    Vector2 worldCoords = GetScreenToWorld2D(GetMousePosition(), ctx->viewport.cam);
+    ctx->grid.x = worldCoords.x / ctx->grid.spacing;
+    ctx->grid.y = worldCoords.y / ctx->grid.spacing;
 
     // Translate based on mouse right click
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
     {
         Vector2 delta = GetMouseDelta();
-        delta = Vector2Scale(delta, -1.0f/viewport->cam.zoom);
-        viewport->cam.target = Vector2Add(viewport->cam.target, delta);
+        delta = Vector2Scale(delta, -1.0f/ctx->viewport.cam.zoom);
+        ctx->viewport.cam.target = Vector2Add(ctx->viewport.cam.target, delta);
     }
 
-    if (viewport->zoomMode == SCROLL_ZOOM_MODE)
+    if (ctx->viewport.zoomMode == SCROLL_ZOOM_MODE)
     {
         // Zoom based on mouse wheel
         float wheel = GetMouseWheelMove();
         if (wheel != 0)
         {
             // Get the world point that is under the mouse
-            Vector2 mouseWorldPos = GetScreenToWorld2D(GetMousePosition(), viewport->cam);
+            Vector2 mouseWorldPos = GetScreenToWorld2D(GetMousePosition(), ctx->viewport.cam);
 
             // Set the offset to where the mouse is
-            viewport->cam.offset = GetMousePosition();
+            ctx->viewport.cam.offset = GetMousePosition();
 
             // Set the target to match, so that the camera maps the world space point
             // under the cursor to the screen space point under the cursor at any zoom
-            viewport->cam.target = mouseWorldPos;
+            ctx->viewport.cam.target = mouseWorldPos;
 
-            ClampTarget(viewport, grid);
+            ClampTarget(ctx);
 
             // Zoom increment
             // Uses log scaling to provide consistent zoom speed
             float scale = 0.2f*wheel;
-            viewport->cam.zoom = Clamp(expf(logf(viewport->cam.zoom)+scale),
-                                       viewport->minZoom, viewport->maxZoom);
+            ctx->viewport.cam.zoom = Clamp(expf(logf(ctx->viewport.cam.zoom)+scale),
+                                       ctx->viewport.minZoom, ctx->viewport.maxZoom);
         }
     }
-    else if (viewport->zoomMode == RTCLICK_ZOOM_MODE)
+    else if (ctx->viewport.zoomMode == RTCLICK_ZOOM_MODE)
     {
         // Zoom based on mouse right click
         if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT))
         {
             // Get the world point that is under the mouse
-            Vector2 mouseWorldPos = GetScreenToWorld2D(GetMousePosition(), viewport->cam);
+            Vector2 mouseWorldPos = GetScreenToWorld2D(GetMousePosition(), ctx->viewport.cam);
 
             // Set the offset to where the mouse is
-            viewport->cam.offset = GetMousePosition();
+            ctx->viewport.cam.offset = GetMousePosition();
 
             // Set the target to match, so that the camera maps the world space point
             // under the cursor to the screen space point under the cursor at any zoom
-            viewport->cam.target = mouseWorldPos;
+            ctx->viewport.cam.target = mouseWorldPos;
 
-            ClampTarget(viewport, grid);
+            ClampTarget(ctx);
         }
 
         if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT))
@@ -125,21 +124,21 @@ void UpdateViewport(viewport_state_t* viewport, grid_state_t* grid, screen_t* sc
             // Uses log scaling to provide consistent zoom speed
             float deltaX = GetMouseDelta().x;
             float scale = 0.005f*deltaX;
-            viewport->cam.zoom = Clamp(expf(logf(viewport->cam.zoom)+scale),
-                                       viewport->minZoom, viewport->maxZoom);
+            ctx->viewport.cam.zoom = Clamp(expf(logf(ctx->viewport.cam.zoom)+scale),
+                                       ctx->viewport.minZoom, ctx->viewport.maxZoom);
         }
     }
 }
 
-void InitializeViewport(viewport_state_t* viewport, grid_state_t* grid, screen_t* screen)
+void InitializeViewport(ui_context_t* ctx)
 {
-    viewport->cam.zoom = 1.0f;
-    viewport->cam.rotation = 0.0f;
+    ctx->viewport.cam.zoom = 1.0f;
+    ctx->viewport.cam.rotation = 0.0f;
 
-    CenterViewport(viewport, grid, screen);
+    CenterViewport(ctx);
 
-    viewport->minZoom = 0.0625f;
-    viewport->maxZoom = 32.0f;
+    ctx->viewport.minZoom = 0.0625f;
+    ctx->viewport.maxZoom = 32.0f;
 
-    viewport->zoomMode = SCROLL_ZOOM_MODE;
+    ctx->viewport.zoomMode = SCROLL_ZOOM_MODE;
 }

@@ -15,6 +15,7 @@
  */
 
 #include "raylib.h"
+#include "ui/context.h"
 
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
@@ -26,26 +27,21 @@
 
 int main()
 {
-    grid_state_t grid;
-    screen_t screen;
-    viewport_state_t viewport;
+    ui_context_t ctx;
 
-    InitializeTileGrid(&grid, 128, 128, 32, 4);
-    InitializeScreen(&screen, 1280, 720, 60);
-    InitializeViewport(&viewport, &grid, &screen);
-
+    InitializeUIContext(&ctx);
     GuiLoadStyleLavanda();
 
     while (!WindowShouldClose())
     {
         // update all editor state before draw
-        UpdateViewport(&viewport, &grid, &screen);
+        UpdateViewport(&ctx);
 
         // draw everything
         BeginDrawing();
             ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR)));
-            BeginMode2D(viewport.cam);
-                DrawTileGrid(&grid);
+            BeginMode2D(ctx.viewport.cam);
+                DrawTileGrid(&ctx);
             EndMode2D();
         EndDrawing();
     }

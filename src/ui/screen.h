@@ -17,10 +17,12 @@
 #ifndef _SCREEN_H
 #define _SCREEN_H
 
+typedef struct ui_context ui_context_t;
+
 typedef struct {
     int width, height, fps;
 } screen_t;
 
-void InitializeScreen(screen_t* screen, int w, int h, int fps);
+void InitializeScreen(ui_context_t* ctx, int w, int h, int fps);
 
 #endif

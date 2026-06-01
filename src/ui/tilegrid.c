@@ -14,20 +14,20 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "tilegrid.h"
+#include "context.h"
 #include "raylib.h"
 #include "raygui.h"
 #include <math.h>
 
-void InitializeTileGrid(grid_state_t* grid, int w, int h, int spacing, int divs)
+void InitializeTileGrid(ui_context_t* ctx, int w, int h, int spacing, int divs)
 {
-    grid->width = w;
-    grid->height = h;
-    grid->spacing = spacing;
-    grid->highlightDivs = divs * spacing;
+    ctx->grid.width = w;
+    ctx->grid.height = h;
+    ctx->grid.spacing = spacing;
+    ctx->grid.highlightDivs = divs * spacing;
 }
 
-void DrawTileGrid(grid_state_t* grid)
+void DrawTileGrid(ui_context_t* ctx)
 {
     // derived from lavanda line color
     Color minor = GetColor(0x6374a0ff);
@@ -36,31 +36,31 @@ void DrawTileGrid(grid_state_t* grid)
 
     Color cur;
 
-    for(int x = 0; x <= grid->width * grid->spacing; x += grid->spacing)
+    for(int x = 0; x <= ctx->grid.width * ctx->grid.spacing; x += ctx->grid.spacing)
     {
         // calculate color points
-        if(x == round(grid->width / 2.0f) * grid->spacing)
+        if(x == round(ctx->grid.width / 2.0f) * ctx->grid.spacing)
             cur = median;
-        else if(x % grid->highlightDivs == 0)
+        else if(x % ctx->grid.highlightDivs == 0)
             cur = major;
         else
             cur = minor;
 
-        DrawLine(x, 0, x, grid->height * grid->spacing, cur);
+        DrawLine(x, 0, x, ctx->grid.height * ctx->grid.spacing, cur);
     }
 
-    for(int y = 0; y <= grid->height * grid->spacing; y += grid->spacing)
+    for(int y = 0; y <= ctx->grid.height * ctx->grid.spacing; y += ctx->grid.spacing)
     {
-        if(y == round(grid->height / 2.0f) * grid->spacing)
+        if(y == round(ctx->grid.height / 2.0f) * ctx->grid.spacing)
             cur = median;
-        else if(y % grid->highlightDivs == 0)
+        else if(y % ctx->grid.highlightDivs == 0)
             cur = major;
         else
             cur = minor;
 
-        DrawLine(0, y, grid->width * grid->spacing, y, cur);
+        DrawLine(0, y, ctx->grid.width * ctx->grid.spacing, y, cur);
     }
 
-    DrawRectangle(grid->x * grid->spacing, grid->y * grid->spacing, grid->spacing, grid->spacing,
-                  median);
+    DrawRectangle(ctx->grid.x * ctx->grid.spacing, ctx->grid.y * ctx->grid.spacing,
+                  ctx->grid.spacing, ctx->grid.spacing, median);
 }

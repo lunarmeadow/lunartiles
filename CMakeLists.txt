@@ -58,6 +58,7 @@ target_link_options(ASAN::ASAN INTERFACE -fsanitize=address,undefined)
 
 set(SOURCES
 ${PROJECT_SOURCE_DIR}/src/main.c
+${PROJECT_SOURCE_DIR}/src/ui/context.c
 ${PROJECT_SOURCE_DIR}/src/ui/tilegrid.c
 ${PROJECT_SOURCE_DIR}/src/ui/viewport.c
 ${PROJECT_SOURCE_DIR}/src/ui/screen.c

@@ -17,6 +17,8 @@
 #ifndef _TILEGRID_H
 #define _TILEGRID_H
 
+typedef struct ui_context ui_context_t;
+
 typedef struct {
     int highlightDivs;
     int width, height; // number of grid cells
@@ -24,7 +26,7 @@ typedef struct {
     int spacing;
 } grid_state_t;
 
-void DrawTileGrid(grid_state_t* grid);
-void InitializeTileGrid(grid_state_t* grid, int w, int h, int spacing, int divs);
+void DrawTileGrid(ui_context_t* ctx);
+void InitializeTileGrid(ui_context_t* ctx, int w, int h, int spacing, int divs);
 
 #endif

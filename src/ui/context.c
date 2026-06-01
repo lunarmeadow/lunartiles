@@ -15,14 +15,10 @@
  */
 
 #include "context.h"
-#include "raylib.h"
 
-void InitializeScreen(ui_context_t* ctx, int w, int h, int fps)
+void InitializeUIContext(ui_context_t* ctx)
 {
-    ctx->screen.width = w;
-    ctx->screen.height = h;
-    ctx->screen.fps = fps;
-
-    InitWindow(ctx->screen.width, ctx->screen.height, "lunartiles");
-    SetTargetFPS(ctx->screen.fps);
+    InitializeTileGrid(ctx, 128, 128, 32, 4);
+    InitializeScreen(ctx, 1280, 720, 60);
+    InitializeViewport(ctx);
 }

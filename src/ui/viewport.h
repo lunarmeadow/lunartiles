@@ -21,8 +21,8 @@
 #define RTCLICK_ZOOM_MODE 1
 
 #include "raylib.h"
-#include "tilegrid.h"
-#include "screen.h"
+
+typedef struct ui_context ui_context_t;
 
 typedef struct {
     Camera2D cam;
@@ -30,7 +30,7 @@ typedef struct {
     int zoomMode;
 } viewport_state_t;
 
-void UpdateViewport(viewport_state_t* viewport, grid_state_t* grid, screen_t* screen);
-void InitializeViewport(viewport_state_t* viewport, grid_state_t* grid , screen_t* screen);
+void UpdateViewport(ui_context_t* ctx);
+void InitializeViewport(ui_context_t* ctx);
 
 #endif
