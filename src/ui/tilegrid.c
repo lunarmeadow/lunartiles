@@ -60,4 +60,7 @@ void DrawTileGrid(grid_state_t* grid)
 
         DrawLine(0, y, grid->width * grid->spacing, y, cur);
     }
+
+    DrawRectangle(grid->x * grid->spacing, grid->y * grid->spacing, grid->spacing, grid->spacing,
+                  median);
 }

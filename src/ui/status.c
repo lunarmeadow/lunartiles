@@ -14,23 +14,3 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _VIEWPORT_H
-#define _VIEWPORT_H
-
-#define SCROLL_ZOOM_MODE 0
-#define RTCLICK_ZOOM_MODE 1
-
-#include "raylib.h"
-#include "tilegrid.h"
-#include "screen.h"
-
-typedef struct {
-    Camera2D cam;
-    float minZoom, maxZoom;
-    int zoomMode;
-} viewport_state_t;
-
-void UpdateViewport(viewport_state_t* viewport, grid_state_t* grid, screen_t* screen);
-void InitializeViewport(viewport_state_t* viewport, grid_state_t* grid , screen_t* screen);
-
-#endif

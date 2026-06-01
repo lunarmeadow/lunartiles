@@ -20,6 +20,7 @@
 typedef struct {
     int highlightDivs;
     int width, height; // number of grid cells
+    int x, y; // selected x, y
     int spacing;
 } grid_state_t;
 

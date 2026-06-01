@@ -44,6 +44,15 @@ void ClampTarget(viewport_state_t* viewport, grid_state_t* grid)
     }
 }
 
+void CenterViewport(viewport_state_t* viewport, grid_state_t* grid, screen_t* screen)
+{
+    Vector2 offset = { screen->width / 2, screen->height / 2 };
+    viewport->cam.offset = offset;
+    viewport->cam.target.x = (grid->width * grid->spacing) / 2.0f;
+    viewport->cam.target.y = (grid->height * grid->spacing) / 2.0f;
+    viewport->cam.zoom = 1.0f;
+}
+
 // adapted from raylib 2d mouse zoom tutorial
 void UpdateViewport(viewport_state_t* viewport, grid_state_t* grid, screen_t* screen)
 {
@@ -52,11 +61,12 @@ void UpdateViewport(viewport_state_t* viewport, grid_state_t* grid, screen_t* sc
 
     if (IsKeyPressed(KEY_R))
     {
-        viewport->cam.offset = GetMousePosition();
-        viewport->cam.target.x = (grid->width * grid->spacing) / 2.0f;
-        viewport->cam.target.y = (grid->height * grid->spacing) / 2.0f;
-        viewport->cam.zoom = 1.0f;
+        CenterViewport(viewport, grid, screen);
     }
+
+    Vector2 worldCoords = GetScreenToWorld2D(GetMousePosition(), viewport->cam);
+    grid->x = worldCoords.x / grid->spacing;
+    grid->y = worldCoords.y / grid->spacing;
 
     // Translate based on mouse right click
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
@@ -121,14 +131,12 @@ void UpdateViewport(viewport_state_t* viewport, grid_state_t* grid, screen_t* sc
     }
 }
 
-void InitializeViewport(viewport_state_t* viewport)
+void InitializeViewport(viewport_state_t* viewport, grid_state_t* grid, screen_t* screen)
 {
     viewport->cam.zoom = 1.0f;
     viewport->cam.rotation = 0.0f;
-    viewport->cam.offset.x = 0.0f;
-    viewport->cam.offset.y = 0.0f;
-    viewport->cam.target.x = 0.0f;
-    viewport->cam.target.x = 0.0f;
+
+    CenterViewport(viewport, grid, screen);
 
     viewport->minZoom = 0.0625f;
     viewport->maxZoom = 32.0f;

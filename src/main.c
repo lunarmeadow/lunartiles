@@ -30,9 +30,9 @@ int main()
     screen_t screen;
     viewport_state_t viewport;
 
-    InitializeTileGrid(&grid, 128, 128, 16, 4);
+    InitializeTileGrid(&grid, 128, 128, 32, 4);
     InitializeScreen(&screen, 1280, 720, 60);
-    InitializeViewport(&viewport);
+    InitializeViewport(&viewport, &grid, &screen);
 
     GuiLoadStyleLavanda();
 
