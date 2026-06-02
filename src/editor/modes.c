@@ -38,7 +38,7 @@ void DrawEditMode(ui_context_t* ctx)
 
 void PollMode(editor_state_t* state)
 {
-    switch(state->mode)
+    switch(state->view_mode)
     {
         case EDIT:
             UpdateMode = &UpdateEditMode;
