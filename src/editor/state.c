@@ -14,35 +14,9 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+#include "state.h"
 
-#include "raylib.h"
-
-#define RAYGUI_IMPLEMENTATION
-#include "raygui.h"
-#include "style_lavanda.h"
-
-#include "ui/context.h"
-#include "editor/state.h"
-#include "editor/modes.h"
-
-int main()
+void InitializeEditorState(editor_state_t* editor)
 {
-    ui_context_t ctx;
-    editor_state_t editor;
-
-    InitializeEditorState(&editor);
-    InitializeUIContext(&ctx);
-
-    GuiLoadStyleLavanda();
-
-    while (!WindowShouldClose())
-    {
-        // todo: move this to the mode selector
-        PollMode(&editor);
-        UpdateMode(&ctx);
-        DrawMode(&ctx);
-    }
-
-    CloseWindow();
-    return 0;
+    editor->mode = EDIT;
 }

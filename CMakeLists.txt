@@ -62,6 +62,8 @@ ${PROJECT_SOURCE_DIR}/src/ui/context.c
 ${PROJECT_SOURCE_DIR}/src/ui/tilegrid.c
 ${PROJECT_SOURCE_DIR}/src/ui/viewport.c
 ${PROJECT_SOURCE_DIR}/src/ui/screen.c
+${PROJECT_SOURCE_DIR}/src/editor/modes.c
+${PROJECT_SOURCE_DIR}/src/editor/state.c
 )
 
 # BUILD TARGET CONFIG

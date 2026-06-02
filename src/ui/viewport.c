@@ -45,7 +45,7 @@ void ClampTarget(ui_context_t* ctx)
 
 void CenterViewport(ui_context_t* ctx)
 {
-    Vector2 offset = { ctx->screen.width / 2, ctx->screen.height / 2 };
+    Vector2 offset = { ctx->screen.width / 2.0f, ctx->screen.height / 2.0f };
     ctx->viewport.cam.offset = offset;
     ctx->viewport.cam.target.x = (ctx->grid.width * ctx->grid.spacing) / 2.0f;
     ctx->viewport.cam.target.y = (ctx->grid.height * ctx->grid.spacing) / 2.0f;

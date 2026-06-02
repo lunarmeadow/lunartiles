@@ -30,4 +30,6 @@ typedef struct {
     enum editor_mode mode;
 } editor_state_t;
 
+void InitializeEditorState(editor_state_t* editor);
+
 #endif

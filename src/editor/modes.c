@@ -13,3 +13,42 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+#include "raylib.h"
+#include "raygui.h"
+#include "state.h"
+#include "../ui/context.h"
+
+void (*UpdateMode)(ui_context_t *);
+void (*DrawMode)(ui_context_t *);
+
+void UpdateEditMode(ui_context_t* ctx)
+{
+    UpdateViewport(ctx);
+}
+void DrawEditMode(ui_context_t* ctx)
+{
+    BeginDrawing();
+        ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR)));
+        BeginMode2D(ctx->viewport.cam);
+            DrawTileGrid(ctx);
+        EndMode2D();
+    EndDrawing();
+}
+
+void PollMode(editor_state_t* state)
+{
+    switch(state->mode)
+    {
+        case EDIT:
+            UpdateMode = &UpdateEditMode;
+            DrawMode = &DrawEditMode;
+            break;
+        case PROPERTIES:
+            break;
+        case MAPINFO:
+            break;
+        case COMMAND:
+            break;
+    }
+}
