@@ -18,6 +18,7 @@
 #include "raylib.h"
 #include "raygui.h"
 #include <math.h>
+#include <stdlib.h>
 
 void InitializeTileGrid(ui_context_t* ctx, int w, int h, int spacing, int divs)
 {
@@ -25,6 +26,18 @@ void InitializeTileGrid(ui_context_t* ctx, int w, int h, int spacing, int divs)
     ctx->grid.height = h;
     ctx->grid.spacing = spacing;
     ctx->grid.highlightDivs = divs * spacing;
+    ctx->grid.tiles = nullptr
+
+    ctx->grid.tiles = calloc(w * h, sizeof(tile_t));
+}
+
+void FreeTileGrid(ui_context_t* ctx)
+{
+    if(ctx->grid.tiles != nullptr)
+    {
+        free(ctx->grid.tiles);
+        ctx->grid.tiles = nullptr;
+    }
 }
 
 void DrawTileGrid(ui_context_t* ctx)
@@ -33,34 +46,45 @@ void DrawTileGrid(ui_context_t* ctx)
     Color minor = GetColor(0x6374a0ff);
     Color major = GetColor(0x7184b7ff);
     Color median = GetColor(0x67b7b2ff);
+    Color tileColor = GetColor(0xff0000ff);
+    Color cursorColor = GetColor(0x00ff00ff);
 
-    Color cur;
+    // draw tilemap
+    for(int x = 0; x < ctx->grid.width; x++)
+    {
+        for(int y = 0; y < ctx->grid.height; y++)
+        {
+            if(ctx->grid.tiles[x + (ctx->grid.width * y)].shape != 0)
+            {
+                DrawRectangle(x * ctx->grid.spacing, y * ctx->grid.spacing,
+                              ctx->grid.spacing, ctx->grid.spacing, tileColor);
+            }
+        }
+    }
 
+    // draw cursor
+    DrawRectangle(ctx->grid.x * ctx->grid.spacing, ctx->grid.y * ctx->grid.spacing,
+                  ctx->grid.spacing, ctx->grid.spacing, cursorColor);
+
+    // draw grid lines
     for(int x = 0; x <= ctx->grid.width * ctx->grid.spacing; x += ctx->grid.spacing)
     {
         // calculate color points
-        if(x == round(ctx->grid.width / 2.0f) * ctx->grid.spacing)
-            cur = median;
-        else if(x % ctx->grid.highlightDivs == 0)
-            cur = major;
+        if(x == (ctx->grid.width >> 1) * ctx->grid.spacing)
+            DrawLine(x, 0, x, ctx->grid.height * ctx->grid.spacing, median);
+        else if((x & ctx->grid.highlightDivs - 1) == 0)
+            DrawLine(x, 0, x, ctx->grid.height * ctx->grid.spacing, major);
         else
-            cur = minor;
-
-        DrawLine(x, 0, x, ctx->grid.height * ctx->grid.spacing, cur);
+            DrawLine(x, 0, x, ctx->grid.height * ctx->grid.spacing, minor);
     }
 
     for(int y = 0; y <= ctx->grid.height * ctx->grid.spacing; y += ctx->grid.spacing)
     {
-        if(y == round(ctx->grid.height / 2.0f) * ctx->grid.spacing)
-            cur = median;
-        else if(y % ctx->grid.highlightDivs == 0)
-            cur = major;
+        if(y == (ctx->grid.height >> 1) * ctx->grid.spacing)
+            DrawLine(0, y, ctx->grid.width * ctx->grid.spacing, y, median);
+        else if((y & ctx->grid.highlightDivs - 1) == 0)
+            DrawLine(0, y, ctx->grid.width * ctx->grid.spacing, y, major);
         else
-            cur = minor;
-
-        DrawLine(0, y, ctx->grid.width * ctx->grid.spacing, y, cur);
+            DrawLine(0, y, ctx->grid.width * ctx->grid.spacing, y, minor);
     }
-
-    DrawRectangle(ctx->grid.x * ctx->grid.spacing, ctx->grid.y * ctx->grid.spacing,
-                  ctx->grid.spacing, ctx->grid.spacing, median);
 }

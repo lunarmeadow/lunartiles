@@ -22,3 +22,8 @@ void InitializeUIContext(ui_context_t* ctx)
     InitializeScreen(ctx, 1280, 720, 60);
     InitializeViewport(ctx);
 }
+
+void FreeUIContext(ui_context_t* ctx)
+{
+    FreeTileGrid(ctx);
+}

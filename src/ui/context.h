@@ -28,5 +28,6 @@ typedef struct ui_context {
 } ui_context_t;
 
 void InitializeUIContext(ui_context_t* ctx);
+void FreeUIContext(ui_context_t* ctx);
 
 #endif

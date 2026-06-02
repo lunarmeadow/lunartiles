@@ -43,6 +43,7 @@ int main()
         DrawMode(&ctx);
     }
 
+    FreeUIContext(&ctx);
     CloseWindow();
     return 0;
 }

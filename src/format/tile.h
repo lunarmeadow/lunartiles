@@ -14,23 +14,19 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _EDITORSTATE_H
-#define _EDITORSTATE_H
+#ifndef _TILE_H
+#define _TILE_H
+
 #include "stdint.h"
 
-// edit = grid editor view
-// properties = editor for selected tile attributes or,
-// if none selected, the attributes future tiles will use.
-// mapinfo = edit map fields such as size, description
-// command = used for things like navigating when doing file i/o
-enum editor_mode {
-    EDIT, PROPERTIES, MAPINFO, COMMAND
-};
+#define TILE_EMPTY 0
+#define TILE_FULL 1
 
 typedef struct {
-    enum editor_mode mode;
-} editor_state_t;
-
-void InitializeEditorState(editor_state_t* editor);
+    uint8_t northTex, eastTex, southTex, westTex;
+    uint8_t shape;
+    uint8_t floorTex, ceilingTex;
+    uint8_t lightLevel;
+} tile_t;
 
 #endif
