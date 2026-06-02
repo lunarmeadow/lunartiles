@@ -14,20 +14,21 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+
 #include "raylib.h"
-#include "ui/context.h"
 
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
 #include "style_lavanda.h"
 
-#include "ui/tilegrid.h"
-#include "ui/screen.h"
-#include "ui/viewport.h"
+#include "ui/context.h"
+#include "editor/state.h"
 
 int main()
 {
     ui_context_t ctx;
+    editor_state_t editor;
+    editor.mode = EDIT;
 
     InitializeUIContext(&ctx);
     GuiLoadStyleLavanda();

@@ -13,20 +13,3 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
-#ifndef _CONTEXT_H
-#define _CONTEXT_H
-
-#include "tilegrid.h"
-#include "screen.h"
-#include "viewport.h"
-
-typedef struct ui_context {
-    grid_state_t grid;
-    screen_t screen;
-    viewport_state_t viewport;
-} ui_context_t;
-
-void InitializeUIContext(ui_context_t* ctx);
-
-#endif

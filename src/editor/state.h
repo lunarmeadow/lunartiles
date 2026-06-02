@@ -14,19 +14,20 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _CONTEXT_H
-#define _CONTEXT_H
+#ifndef _EDITORSTATE_H
+#define _EDITORSTATE_H
 
-#include "tilegrid.h"
-#include "screen.h"
-#include "viewport.h"
+// edit = grid editor view
+// properties = editor for selected tile attributes or,
+// if none selected, the attributes future tiles will use.
+// mapinfo = edit map fields such as size, description
+// command = used for things like navigating when doing file i/o
+enum editor_mode {
+    EDIT, PROPERTIES, MAPINFO, COMMAND
+};
 
-typedef struct ui_context {
-    grid_state_t grid;
-    screen_t screen;
-    viewport_state_t viewport;
-} ui_context_t;
-
-void InitializeUIContext(ui_context_t* ctx);
+typedef struct {
+    enum editor_mode mode;
+} editor_state_t;
 
 #endif
