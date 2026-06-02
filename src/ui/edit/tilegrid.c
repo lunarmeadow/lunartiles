@@ -14,24 +14,24 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "context.h"
+#include "../context.h"
 #include "raylib.h"
 #include "raygui.h"
 #include <math.h>
 #include <stdlib.h>
 
-void InitializeTileGrid(ui_context_t* ctx, int w, int h, int spacing, int divs)
+void InitializeTileGrid(edit_context_t* ctx, int w, int h, int spacing, int divs)
 {
     ctx->grid.width = w;
     ctx->grid.height = h;
     ctx->grid.spacing = spacing;
     ctx->grid.highlightDivs = divs * spacing;
-    ctx->grid.tiles = nullptr
+    ctx->grid.tiles = nullptr;
 
     ctx->grid.tiles = calloc(w * h, sizeof(tile_t));
 }
 
-void FreeTileGrid(ui_context_t* ctx)
+void FreeTileGrid(edit_context_t* ctx)
 {
     if(ctx->grid.tiles != nullptr)
     {
@@ -40,7 +40,7 @@ void FreeTileGrid(ui_context_t* ctx)
     }
 }
 
-void DrawTileGrid(ui_context_t* ctx)
+void DrawTileGrid(edit_context_t* ctx)
 {
     // derived from lavanda line color
     Color minor = GetColor(0x6374a0ff);

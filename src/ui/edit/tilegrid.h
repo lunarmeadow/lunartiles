@@ -14,9 +14,23 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "state.h"
+#ifndef _TILEGRID_H
+#define _TILEGRID_H
 
-void InitializeEditorState(editor_state_t* editor)
-{
-    editor->mode = EDIT;
-}
+#include "../../format/tile.h"
+
+typedef struct edit_context edit_context_t;
+
+typedef struct {
+    int highlightDivs;
+    int width, height; // number of grid cells
+    tile_t* tiles;
+    int x, y; // selected x, y
+    int spacing;
+} grid_state_t;
+
+void DrawTileGrid(edit_context_t* ctx);
+void InitializeTileGrid(edit_context_t* ctx, int w, int h, int spacing, int divs);
+void FreeTileGrid(edit_context_t* ctx);
+
+#endif

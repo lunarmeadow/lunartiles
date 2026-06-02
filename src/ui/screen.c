@@ -14,15 +14,19 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "context.h"
 #include "raylib.h"
 
-void InitializeScreen(ui_context_t* ctx, int w, int h, int fps)
+void InitializeScreen(void)
 {
-    ctx->screen.width = w;
-    ctx->screen.height = h;
-    ctx->screen.fps = fps;
+    InitWindow(0, 0, "lunartiles");
+    int w = GetScreenWidth() - 100;
+    int h = GetScreenHeight() - 200;
 
-    InitWindow(ctx->screen.width, ctx->screen.height, "lunartiles");
-    SetTargetFPS(ctx->screen.fps);
+    ToggleFullscreen();
+    SetWindowState(FLAG_WINDOW_RESIZABLE);
+    SetWindowMinSize(800, 600);
+    SetWindowSize(w, h);
+    SetWindowPosition(50, 100);
+
+    SetTargetFPS(GetMonitorRefreshRate(GetCurrentMonitor()));
 }

@@ -17,15 +17,44 @@
 #ifndef _CONTEXT_H
 #define _CONTEXT_H
 
-#include "tilegrid.h"
+#include "edit/tilegrid.h"
 #include "screen.h"
-#include "viewport.h"
+#include "edit/viewport.h"
+
+// edit = grid editor view
+// properties = editor for selected tile attributes or,
+// if none selected, the attributes future tiles will use.
+// mapinfo = edit map fields such as size, description
+// command = used for things like navigating when doing file i/o
+enum editor_mode {
+    EDIT, PROPERTIES, MAPINFO, COMMAND
+};
+
+enum move_mode {
+    KEYBOARD, MOUSE
+};
 
 typedef struct ui_context {
-    grid_state_t grid;
-    screen_t screen;
-    viewport_state_t viewport;
+    enum editor_mode view_mode;
+    enum move_mode move_mode;
 } ui_context_t;
+
+typedef struct edit_context {
+    grid_state_t grid;
+    viewport_state_t viewport;
+} edit_context_t;
+
+typedef struct props_context {
+    int placeholder;
+} props_context_t;
+
+typedef struct mapinfo_context {
+    int placeholder;
+} mapinfo_context_t;
+
+typedef struct cmd_context {
+    int placeholder;
+} cmd_context_t;
 
 void InitializeUIContext(ui_context_t* ctx);
 void FreeUIContext(ui_context_t* ctx);

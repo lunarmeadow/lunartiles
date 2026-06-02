@@ -18,12 +18,9 @@
 
 void InitializeUIContext(ui_context_t* ctx)
 {
-    InitializeTileGrid(ctx, 128, 128, 32, 4);
-    InitializeScreen(ctx, 1280, 720, 60);
-    InitializeViewport(ctx);
+    InitializeScreen();
 }
 
 void FreeUIContext(ui_context_t* ctx)
 {
-    FreeTileGrid(ctx);
 }

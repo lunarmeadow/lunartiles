@@ -14,23 +14,21 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _EDITORSTATE_H
-#define _EDITORSTATE_H
-#include "stdint.h"
+#ifndef _MODES_H
+#define _MODES_H
 
-// edit = grid editor view
-// properties = editor for selected tile attributes or,
-// if none selected, the attributes future tiles will use.
-// mapinfo = edit map fields such as size, description
-// command = used for things like navigating when doing file i/o
-enum editor_mode {
-    EDIT, PROPERTIES, MAPINFO, COMMAND
-};
+typedef struct ui_context ui_context_t;
 
-typedef struct {
-    enum editor_mode mode;
-} editor_state_t;
+// pointer to the view-specific context object...
+// this is sort of fragile but I would like to avoid having all the state be directly accessible.
+extern void* view_ctx;
 
-void InitializeEditorState(editor_state_t* editor);
+extern void (*UpdateMode)(ui_context_t *, void *);
+extern void (*DrawMode)(ui_context_t *, void *);
+
+void InitializeModes(void);
+void FreeModes(void);
+
+void PollMode(ui_context_t* state);
 
 #endif

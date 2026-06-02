@@ -16,9 +16,10 @@
 
 #include "raylib.h"
 #include "raymath.h"
-#include "context.h"
+#include "../context.h"
+#include "tilegrid.h"
 
-void ClampTarget(ui_context_t* ctx)
+void ClampTarget(edit_context_t* ctx)
 {
     float minX = 0;
     float maxX = (ctx->grid.width * ctx->grid.spacing);
@@ -43,9 +44,9 @@ void ClampTarget(ui_context_t* ctx)
     }
 }
 
-void CenterViewport(ui_context_t* ctx)
+void CenterViewport(edit_context_t* ctx)
 {
-    Vector2 offset = { ctx->screen.width / 2.0f, ctx->screen.height / 2.0f };
+    Vector2 offset = { GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f };
     ctx->viewport.cam.offset = offset;
     ctx->viewport.cam.target.x = (ctx->grid.width * ctx->grid.spacing) / 2.0f;
     ctx->viewport.cam.target.y = (ctx->grid.height * ctx->grid.spacing) / 2.0f;
@@ -53,7 +54,7 @@ void CenterViewport(ui_context_t* ctx)
 }
 
 // adapted from raylib 2d mouse zoom tutorial
-void UpdateViewport(ui_context_t* ctx)
+void UpdateViewport(edit_context_t* ctx)
 {
     if (IsKeyPressed(KEY_LEFT_BRACKET)) ctx->viewport.zoomMode = 0;
     else if (IsKeyPressed(KEY_RIGHT_BRACKET)) ctx->viewport.zoomMode = 1;
@@ -130,7 +131,7 @@ void UpdateViewport(ui_context_t* ctx)
     }
 }
 
-void InitializeViewport(ui_context_t* ctx)
+void InitializeViewport(edit_context_t* ctx)
 {
     ctx->viewport.cam.zoom = 1.0f;
     ctx->viewport.cam.rotation = 0.0f;

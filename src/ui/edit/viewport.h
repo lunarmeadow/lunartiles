@@ -14,16 +14,23 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef _MODES_H
-#define _MODES_H
+#ifndef _VIEWPORT_H
+#define _VIEWPORT_H
 
-#include "state.h"
+#define SCROLL_ZOOM_MODE 0
+#define RTCLICK_ZOOM_MODE 1
 
-typedef struct ui_context ui_context_t;
+#include "raylib.h"
 
-extern void (*UpdateMode)(ui_context_t *);
-extern void (*DrawMode)(ui_context_t *);
+typedef struct edit_context edit_context_t;
 
-void PollMode(editor_state_t* state);
+typedef struct {
+    Camera2D cam;
+    float minZoom, maxZoom;
+    int zoomMode;
+} viewport_state_t;
+
+void UpdateViewport(edit_context_t* ctx);
+void InitializeViewport(edit_context_t* ctx);
 
 #endif
