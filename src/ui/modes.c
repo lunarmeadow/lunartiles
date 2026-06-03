@@ -82,7 +82,7 @@ void DrawPropertiesMode(ui_context_t* ui_ctx, void* props_ctx)
     props_context_t* ctx = (props_context_t*)props_ctx;
     BeginDrawing();
     ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR)));
-        DrawText("This mode is WIP!", 0, 0, 16, GetColor(0xff0000ff));
+        DrawText("Property Mode", 0, 0, 48, GetColor(0xff0000ff));
     EndDrawing();
 }
 
@@ -95,7 +95,7 @@ void DrawMapinfoMode(ui_context_t* ui_ctx, void* mapinfo_ctx)
     mapinfo_context_t* ctx = (mapinfo_context_t*)mapinfo_ctx;
     BeginDrawing();
     ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR)));
-    DrawText("This mode is WIP!", 0, 0, 16, GetColor(0xff0000ff));
+    DrawText("Map Info Mode", 0, 0, 48, GetColor(0xff0000ff));
     EndDrawing();
 }
 
@@ -108,8 +108,35 @@ void DrawCommandMode(ui_context_t* ui_ctx, void* cmd_ctx)
     cmd_context_t* ctx = (cmd_context_t*)cmd_ctx;
     BeginDrawing();
     ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR)));
-    DrawText("This mode is WIP!", 0, 0, 16, GetColor(0xff0000ff));
+    DrawText("Command Mode", 0, 0, 48, GetColor(0xff0000ff));
     EndDrawing();
+}
+
+void SelectMode(ui_context_t* ctx)
+{
+    if(IsKeyDown(KEY_LEFT_CONTROL))
+    {
+        if(IsKeyPressed(KEY_ONE))
+        {
+            ctx->view_mode = EDIT;
+            PollMode(ctx);
+        }
+        if(IsKeyPressed(KEY_TWO))
+        {
+            ctx->view_mode = PROPERTIES;
+            PollMode(ctx);
+        }
+        if(IsKeyPressed(KEY_THREE))
+        {
+            ctx->view_mode = MAPINFO;
+            PollMode(ctx);
+        }
+        if(IsKeyPressed(KEY_FOUR))
+        {
+            ctx->view_mode = COMMAND;
+            PollMode(ctx);
+        }
+    }
 }
 
 void PollMode(ui_context_t* ctx)

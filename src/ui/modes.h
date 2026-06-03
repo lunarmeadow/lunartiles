@@ -29,6 +29,7 @@ extern void (*DrawMode)(ui_context_t *, void *);
 void InitializeModes(void);
 void FreeModes(void);
 
-void PollMode(ui_context_t* state);
+void SelectMode(ui_context_t* ctx);
+void PollMode(ui_context_t* ctx);
 
 #endif

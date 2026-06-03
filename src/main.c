@@ -36,6 +36,8 @@ int main()
 
     while (!WindowShouldClose())
     {
+        SelectMode(&ui_ctx);
+
         if(view_ctx == nullptr)
             break;
 
