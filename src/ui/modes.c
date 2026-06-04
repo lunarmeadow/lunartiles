@@ -60,7 +60,9 @@ void FreeModes(void)
 
 void UpdateEditMode(ui_context_t* ui_ctx, void* edit_ctx)
 {
-    UpdateViewport(edit_ctx);
+    edit_context_t* ctx = (edit_context_t*)edit_ctx;
+    ProcessTiles(ctx);
+    UpdateViewport(ui_ctx, ctx);
 }
 void DrawEditMode(ui_context_t* ui_ctx, void* edit_ctx)
 {
@@ -68,7 +70,7 @@ void DrawEditMode(ui_context_t* ui_ctx, void* edit_ctx)
     BeginDrawing();
         ClearBackground(GetColor(GuiGetStyle(DEFAULT, BACKGROUND_COLOR)));
         BeginMode2D(ctx->viewport.cam);
-            DrawTileGrid(ctx);
+            DrawTileGrid(ui_ctx, ctx);
         EndMode2D();
     EndDrawing();
 }

@@ -19,17 +19,17 @@
 
 #include "../../format/tile.h"
 
+typedef struct ui_context ui_context_t;
 typedef struct edit_context edit_context_t;
 
 typedef struct {
     int highlightDivs;
     int width, height; // number of grid cells
     tile_t* tiles;
-    int x, y; // selected x, y
     int spacing;
 } grid_state_t;
 
-void DrawTileGrid(edit_context_t* ctx);
+void DrawTileGrid(ui_context_t* ui_ctx, edit_context_t* ctx);
 void InitializeTileGrid(edit_context_t* ctx, int w, int h, int spacing, int divs);
 void FreeTileGrid(edit_context_t* ctx);
 

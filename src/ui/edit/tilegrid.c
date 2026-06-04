@@ -17,6 +17,7 @@
 #include "../context.h"
 #include "raylib.h"
 #include "raygui.h"
+#include "../../stb/stb_ds.h"
 #include <math.h>
 #include <stdlib.h>
 
@@ -40,7 +41,7 @@ void FreeTileGrid(edit_context_t* ctx)
     }
 }
 
-void DrawTileGrid(edit_context_t* ctx)
+void DrawTileGrid(ui_context_t* ui_ctx, edit_context_t* ctx)
 {
     // derived from lavanda line color
     Color minor = GetColor(0x6374a0ff);
@@ -49,22 +50,23 @@ void DrawTileGrid(edit_context_t* ctx)
     Color tileColor = GetColor(0xff0000ff);
     Color cursorColor = GetColor(0x00ff00ff);
 
-    // draw tilemap
+    // draw and process tilemap
     for(int x = 0; x < ctx->grid.width; x++)
     {
         for(int y = 0; y < ctx->grid.height; y++)
         {
-            if(ctx->grid.tiles[x + (ctx->grid.width * y)].shape != 0)
+            if(ctx->grid.tiles[x + (ctx->grid.width * y)].tile.shape != 0)
             {
                 DrawRectangle(x * ctx->grid.spacing, y * ctx->grid.spacing,
                               ctx->grid.spacing, ctx->grid.spacing, tileColor);
             }
+            if(ctx->grid.tiles[x + (ctx->grid.width * y)].isSelected)
+            {
+                DrawRectangle(x * ctx->grid.spacing, y * ctx->grid.spacing,
+                              ctx->grid.spacing, ctx->grid.spacing, cursorColor);
+            }
         }
     }
-
-    // draw cursor
-    DrawRectangle(ctx->grid.x * ctx->grid.spacing, ctx->grid.y * ctx->grid.spacing,
-                  ctx->grid.spacing, ctx->grid.spacing, cursorColor);
 
     // draw grid lines
     for(int x = 0; x <= ctx->grid.width * ctx->grid.spacing; x += ctx->grid.spacing)

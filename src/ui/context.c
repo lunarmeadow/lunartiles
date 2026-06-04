@@ -15,12 +15,16 @@
  */
 
 #include "context.h"
+#include "../stb/stb_ds.h"
 
 void InitializeUIContext(ui_context_t* ctx)
 {
     InitializeScreen();
+    ctx->view_mode = EDIT;
+    ctx->move_mode = MOUSE;
 }
 
 void FreeUIContext(ui_context_t* ctx)
 {
+    arrfree(ctx->selectedTiles);
 }

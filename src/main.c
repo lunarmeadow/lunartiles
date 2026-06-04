@@ -23,6 +23,9 @@
 #include "ui/context.h"
 #include "ui/modes.h"
 
+#define STB_DS_IMPLEMENTATION
+#include "stb/stb_ds.h"
+
 int main()
 {
     ui_context_t ui_ctx;
@@ -45,8 +48,8 @@ int main()
         DrawMode(&ui_ctx, view_ctx);
     }
 
-    FreeUIContext(&ui_ctx);
     FreeModes();
+    FreeUIContext(&ui_ctx);
 
     CloseWindow();
     return 0;

@@ -27,6 +27,11 @@ typedef struct {
     uint8_t shape;
     uint8_t floorTex, ceilingTex;
     uint8_t lightLevel;
-} tile_t;
+} map_tile_t; // structure to be serialized for game
+
+typedef struct {
+    bool isSelected; // prevent superfluous x,y storage and more complex logic in renderer
+    map_tile_t tile;
+} tile_t; // extra info for editor
 
 #endif

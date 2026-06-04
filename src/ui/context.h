@@ -17,9 +17,10 @@
 #ifndef _CONTEXT_H
 #define _CONTEXT_H
 
-#include "edit/tilegrid.h"
+
 #include "screen.h"
 #include "edit/viewport.h"
+#include "edit/tilegrid.h"
 
 // edit = grid editor view
 // properties = editor for selected tile attributes or,
@@ -37,6 +38,9 @@ enum move_mode {
 typedef struct ui_context {
     enum editor_mode view_mode;
     enum move_mode move_mode;
+
+    tile_t propertyTile; // tile to use for modifying selected tiles or adding new tiles
+    tile_t** selectedTiles; // tile selection buffer (using stb_ds)
 } ui_context_t;
 
 typedef struct edit_context {

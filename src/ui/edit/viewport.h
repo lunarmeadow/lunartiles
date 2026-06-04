@@ -22,15 +22,17 @@
 
 #include "raylib.h"
 
+typedef struct ui_context ui_context_t;
 typedef struct edit_context edit_context_t;
 
 typedef struct {
     Camera2D cam;
     float minZoom, maxZoom;
     int zoomMode;
+    int hoverX, hoverY; // in tile coords
 } viewport_state_t;
 
-void UpdateViewport(edit_context_t* ctx);
+void UpdateViewport(ui_context_t* ui_ctx, edit_context_t* ctx);
 void InitializeViewport(edit_context_t* ctx);
 
 #endif

@@ -18,6 +18,7 @@
 #include "raymath.h"
 #include "../context.h"
 #include "tilegrid.h"
+#include "../../stb/stb_ds.h"
 
 void ClampTarget(edit_context_t* ctx)
 {
@@ -53,8 +54,53 @@ void CenterViewport(edit_context_t* ctx)
     ctx->viewport.cam.zoom = 1.0f;
 }
 
+void SelectTiles(ui_context_t* ui_ctx, edit_context_t* ctx)
+{
+    if (IsKeyPressed(KEY_SPACE) || (IsKeyDown(KEY_LEFT_SHIFT) && IsKeyDown(KEY_SPACE)))
+    {
+        // guard oob read/writes
+        if(ctx->viewport.hoverX < 0 || ctx->viewport.hoverX >= ctx->grid.width ||
+            ctx->viewport.hoverY < 0 || ctx->viewport.hoverY >= ctx->grid.height)
+            return;
+
+        int idx = ctx->viewport.hoverX + (ctx->grid.width * ctx->viewport.hoverY);
+        tile_t* copy = &ctx->grid.tiles[idx];
+        if(!copy->isSelected)
+        {
+            copy->isSelected = true;
+            arrpush(ui_ctx->selectedTiles, copy);
+        }
+        else if(copy->isSelected)
+        {
+            copy->isSelected = false;
+
+            // find reference to tile in table to remove by index
+            for(int tile = 0; tile < arrlen(ui_ctx->selectedTiles); tile++)
+            {
+                if(ui_ctx->selectedTiles[tile] == copy)
+                {
+                    arrdel(ui_ctx->selectedTiles, tile);
+                }
+            }
+        }
+    }
+
+    // clear selection on ctrl+a
+    if(IsKeyDown(KEY_LEFT_CONTROL) && IsKeyPressed(KEY_A))
+    {
+        if(arrlen(ui_ctx->selectedTiles))
+        {
+            for(int tile = arrlen(ui_ctx->selectedTiles) - 1; tile >= 0; tile--)
+            {
+                ui_ctx->selectedTiles[tile]->isSelected = false;
+                arrdel(ui_ctx->selectedTiles, tile);
+            }
+        }
+    }
+}
+
 // adapted from raylib 2d mouse zoom tutorial
-void UpdateViewport(edit_context_t* ctx)
+void UpdateViewport(ui_context_t* ui_ctx, edit_context_t* ctx)
 {
     if (IsKeyPressed(KEY_LEFT_BRACKET)) ctx->viewport.zoomMode = 0;
     else if (IsKeyPressed(KEY_RIGHT_BRACKET)) ctx->viewport.zoomMode = 1;
@@ -65,8 +111,10 @@ void UpdateViewport(edit_context_t* ctx)
     }
 
     Vector2 worldCoords = GetScreenToWorld2D(GetMousePosition(), ctx->viewport.cam);
-    ctx->grid.x = worldCoords.x / ctx->grid.spacing;
-    ctx->grid.y = worldCoords.y / ctx->grid.spacing;
+    ctx->viewport.hoverX = worldCoords.x / ctx->grid.spacing;
+    ctx->viewport.hoverY = worldCoords.y / ctx->grid.spacing;
+
+    SelectTiles(ui_ctx, ctx);
 
     // Translate based on mouse right click
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
